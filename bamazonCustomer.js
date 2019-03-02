@@ -58,18 +58,23 @@ function promptUser(){
 }
 
 function makePurchase(id, amount){
-    connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?',
-    [amount, id], 
-    (err, response) => {
-        if (err) {
-            console.log(err)
-        } if (amount > 'stock_quantity') {
-            console.log("Not enough stock!")
-            // loadProducts();
-        } else {
-            loadProducts();
-        }
-    })
+    // Get stock quanity from data base - use connection
+    var stock_quantity = 0; // Assign result to variable
+
+    if (amount > stock_quantity) {
+        console.log("Not enough stock!")
+    } else {
+        connection.query('UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?',
+            [amount, id], 
+            function (err, response) {
+                if (err) {
+                    return console.log(err)
+                } 
+
+                loadProducts();
+            })
+    }
+    
 }
 
 // function checkQuantity() {
